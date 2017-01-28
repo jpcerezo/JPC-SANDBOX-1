@@ -1,4 +1,4 @@
 # TEST1
-Testing repository
+ONT config and details 
 Originated by Juan P. Cerezo 
 No special instructions, just to play and go
