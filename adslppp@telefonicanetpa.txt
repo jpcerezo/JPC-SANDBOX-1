@@ -1,0 +1,217 @@
+adslppp@telefonicanetpa
+
+etc/config/firewall:
+
+config	defaults
+option	syn_flood	'1'
+option	input	'ACCEPT'
+option	output	'ACCEPT'
+option forward	'REJECT'
+config	zone
+option	name	'lan'
+option	input	'ACCEPT'
+option	output	'ACCEPT'
+option	forward	'REJECT'
+option	network	'lan'
+config	zone
+option	name	'wan'
+option	network	'wan'
+option	input	'REJECT'
+option	output	'ACCEPT'
+option forward	'REJECT'
+option	masq	'1'
+option	mtu_fix	'1'
+config	forwarding
+option	dest	'wan'
+option	src	'lan'
+config	zone
+option	name	'voip'
+option	input	'ACCEPT'
+option	forward	'REJECT'
+option	output	'ACCEPT'
+option	network	'voip'
+option	masq	'1'
+config	forwarding
+option	dest	'voip'
+option	src	'lan'
+config	zone
+option	name	'iptv'
+option	input	'ACCEPT'
+option	output	'ACCEPT'
+option	network	'iptv'
+option	forward	'REJECT'
+config	forwarding
+option	src	'lan'
+option	dest	'iptv'
+config	rule
+option name	'IGMP	IPTV'
+option	src	'iptv'
+option	proto	'igmp'
+option	target	'ACCEPT'
+config	rule
+option	name	'UDP	IPTV'
+option	src	'iptv'
+option	proto	'udp'
+option	dest	'lan'
+option	dest_ip	'224.0.0.0/4'
+option	target	'ACCEPT'
+config	rule
+option name	'UDP	IPTV	(udpxy)'
+option	src	'iptv'
+option	proto	'udp'
+option	dest_ip	'224.0.0.0/4'
+option	target	'ACCEPT'
+option	enabled	'0'
+config	rule
+option	name	'Allow-DHCP-Renew'
+option	src	'wan'
+option	proto	'udp'
+option	dest_port	'68'
+option	target	'ACCEPT'
+option	family	'ipv4'
+config	rule
+option	name	'Allow-Ping'
+option	src	'wan'
+option	proto	'icmp'
+option	icmp_type	'echo-request'
+option	family	'ipv4'
+option	target	'ACCEPT'
+config	rule
+option	name	'Allow-DHCPv6'
+option	src	'wan'
+option	proto	'udp'
+option src_ip	'fe80::/10'
+option	src_port	'547'
+option	dest_ip	'fe80::/10'
+option	dest_port	'546'
+option	family	'ipv6'
+option	target	'ACCEPT'
+config	rule
+option	name	'Allow-ICMPv6-Input'
+option	src	'wan'
+option	proto	'icmp'
+list	icmp_type	'echo-request'
+list	icmp_type	'echo-reply'
+list	icmp_type	'destination-unreachable'
+list	icmp_type	'packet-too-big'
+list	icmp_type	'time-exceeded'
+list	icmp_type	'bad-header'
+list	icmp_type	'unknown-header-type'
+list	icmp_type	'router-solicitation'
+list	icmp_type	'neighbour-solicitation'
+list	icmp_type	'router-advertisement'
+list	icmp_type	'neighbour-advertisement'
+option	limit	'1000/sec'
+option	family	'ipv6'
+option	target	'ACCEPT'
+config	rule
+option	name	'Allow-ICMPv6-Forward'
+option	src	'wan'
+option	dest	'*'
+option	proto	'icmp'
+list	icmp_type	'echo-request'
+list	icmp_type	'echo-reply'
+list	icmp_type	'destination-unreachable'
+list	icmp_type	'packet-too-big'
+list	icmp_type	'time-exceeded'
+list	icmp_type	'bad-header'
+list	icmp_type	'unknown-header-type'
+option	limit	'1000/sec'
+option	family	'ipv6'
+option	target	'ACCEPT'
+config	rule
+option	name	'Enforce-ULA-Border-Src'
+option	src	'*'
+option	dest	'wan'
+option	proto	'all'
+option	src_ip	'fc00::/7'
+option	family	'ipv6'
+option	target	'REJECT'
+config	rule
+option name	'Enforce-ULA-Border-Dest'
+option	src	'*'
+option	dest	'wan'
+option	proto	'all'
+option	dest_ip	'fc00::/7'
+option	family	'ipv6'
+option	target	'REJECT'
+config	include
+option	path	'/etc/firewall.user'
+
+BIRD4: 
+
+vaciar y editar:
+
+rm	–rf	/etc/bird4.conf
+vi	/etc/bird4.conf
+
+/etc/bidr4/conf:
+
+log	syslog	all;
+protocol	kernel	{
+persist;
+scan	time	20;
+import	all;
+export all;
+}
+protocol	device	{
+scan	time	10;
+}
+protocol	static	{
+export	none;
+}
+filter	voip_filter	{
+if	net	~	10.0.0.0/8	then	accept;
+else	reject;
+}
+protocol	rip voip {
+import	all;
+export	filter	voip_filter;
+interface	"eth0.3";
+}
+filter	iptv_filter	{
+if net	~	172.26.0.0/16 then	accept;
+else	reject;
+}
+protocol	rip iptv {
+import	all;
+export	filter	iptv_filter;
+interface	"eth0.2";
+}
+
+y despues /etc/init.d/bird4	enable
+
+IGMPPROXY:
+
+rm	–rf	/etc/config/igmpproxy
+vi	/etc/config/igmpproxy
+
+/etc/config/igmpproxy:
+
+config	igmpproxy
+option	quickleave	1
+config	phyint
+option	network	iptv
+option	direction	upstream
+list	altnet	192.168.1.0/24
+list	altnet	172.0.0.0/8 (no seria 10.0.0.0/8??)
+config	phyint
+option	network	lan
+option direction	downstream
+
+y activar:
+
+/etc/init.d/igmpproxy enable
+
+UDPXY:
+
+vi	/etc/init.d/udpxy
+
+poner
+
+OPTIONS="-T	-S	-p	4000	-m	eth0.2	-M	60"
+
+y activar:
+
+/etc/init.d/udpxy enable
+
