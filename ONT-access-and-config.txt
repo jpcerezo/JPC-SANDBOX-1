@@ -1,0 +1,17 @@
+Details:
+
+ONT HG820 user: root, pass: admin
+ONT HG8240 user: telecomadmin, pass: admintelecom
+ONT HG8240H user: telecomadmin, pass: admintelecom
+
+On both cases, you must unplug fiber to allow access via ETH port, using 192.168.100.1 (ONT) and 192.168.100.2 (workstation)
+
+For the ASKEY router access to ONT config, you have to go to 
+
+http://192.168.1.1/instalacion 
+
+and use the same user/pass than for the Router configuration. The IDONT/GPON params are the same than
+for the Huawei ONT. 
+
+Also, if you have VoIP service contracted, you must change the Serial Number (S/N) for the ONT as well as the IDONT password. 
+Leaving the S/N provided by default will not work (for the VoIP configuration).
