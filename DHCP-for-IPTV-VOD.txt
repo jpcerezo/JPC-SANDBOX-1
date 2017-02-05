@@ -1,0 +1,27 @@
+# THis option allows to use different net params when is the deco IPTV
+# who is asking (assign 'decoiptv' tag for vendorclass 'IAL'). 
+# The DNS assignment specially must be different for VOD to work. 
+#
+config vendorclass
+option vendorclass 'IAL'
+option networkid 'decoiptv'
+
+config dhcp 'lan'
+option interface 'lan'
+option networkid 'tag:!decoiptv'
+option start '40'
+option limit '59'
+option leasetime '24h'
+option dhcpv6 'hybrid'
+option ra 'hybrid'
+option ndp 'hybrid'
+list dhcp_option '252,\n'
+
+config dhcp 'decoiptv'
+option networkid 'tag:decoiptv'
+option interface 'lan'
+option start '200'
+option limit '10'
+option leasetime '24h'
+list dhcp_option '6,172.26.23.3,172.26.23.3'
+list dhcp_option '240,:::::239.0.2.10:22222:v6.0:239.0.2.30:22222'
