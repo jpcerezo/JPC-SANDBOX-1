@@ -1,8 +1,6 @@
-.. image:: https://readthedocs.com/projects/inetlabses-test1/badge/?version=latest
-:target: https://inetlabses-test1.readthedocs-hosted.com/en/latest/?badge=latest
-:alt: Documentation Status
+.. image:: https://readthedocs.com/projects/inetlabses-test1/badge/?version=latest :target: https://inetlabses-test1.readthedocs-hosted.com/en/latest/?badge=latest :alt: Documentation Status
 
-Troubleshooting Guide
+Presentation of the Movistar Imagenio configs
 ======================
 
 To check if containers are running, execute the following command. By default you should have 3 containers running
