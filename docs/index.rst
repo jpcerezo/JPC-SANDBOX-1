@@ -1,58 +1,27 @@
-User Documentation
-==================
+Troubleshooting Guide
+======================
 
-* :ref:`installation-docs`
-  * :ref:`dashboards-docs`
-    * :ref:`troubleshooting-docs`
+To check if containers are running, execute the following command. By default you should have 3 containers running
 
-    Additional Documentation
-    ========================
+.. code-block:: text
 
-    * :ref:`architecture-docs`
-      * :ref:`input-plugins-docs`
+  docker ps
 
+To force containers to stop, execute
 
-      .. _installation-docs:
+.. code-block:: text
 
-   .. toctree::
-      :maxdepth: 2
-         :caption: Installation
+  make stop
 
-         install
-            customize
+To access the CLI of the main container for debug,
+Start a SSH session using the insecure_key provided in the repo and the script "docker.cli.sh"
 
-            .. _architecture-docs:
+.. code-block:: text
 
-         .. toctree::
-            :maxdepth: 2
-               :caption: Architecture
+  make cli
 
-               architecture
+For the Input containers named __open-nti-input-*__ you can access the logs directly from docker by running :
 
-               .. _input-plugins-docs:
+.. code-block:: text
 
-            .. toctree::
-               :maxdepth: 2
-                  :caption: Input Plugins
-
-                  datacollectionagent
-                     datastreaming
-                        event
-                           snmpcollectionagent
-
-                           .. _dashboards-docs:
-
-                        .. toctree::
-                           :maxdepth: 2
-                              :caption: Dashboards
-
-                              dashboard
-                                 dashboardlib
-
-                                 .. _troubleshooting-docs:
-
-                              .. toctree::
-                                 :maxdepth: 2
-                                    :caption: Troubleshooting
-
-                                    troubleshoot
+  docker logs <container name or ID>
