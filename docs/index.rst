@@ -1,4 +1,10 @@
-.. image:: https://readthedocs.com/projects/inetlabses-test1/badge/?version=latest:target: https://inetlabses-test1.readthedocs-hosted.com/en/latest/?badge=latest:alt: Documentation Status
+.. image:: https://readthedocs.com/projects/inetlabses-test1/badge/?version=latest
+:target: https://inetlabses-test1.readthedocs-hosted.com/en/latest/?badge=latest
+:alt: Documentation Status
+
+<a href='https://inetlabses-test1.readthedocs-hosted.com/en/latest/?badge=latest'>
+<img src='https://readthedocs.com/projects/inetlabses-test1/badge/?version=latest' alt='Documentation Status' />
+</a>
 
 Presentation of the Movistar Imagenio configs
 ======================
