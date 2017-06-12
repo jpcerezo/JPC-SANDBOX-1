@@ -1,3 +1,7 @@
+.. image:: https://readthedocs.com/projects/inetlabses-test1/badge/?version=latest
+:target: https://inetlabses-test1.readthedocs-hosted.com/en/latest/?badge=latest
+:alt: Documentation Status
+
 Troubleshooting Guide
 ======================
 
